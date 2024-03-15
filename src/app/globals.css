@@ -1,3 +1,37 @@
 :root {
-  
+  --light-gray: #7B7B7B;
+  --dark-grey: #1B2028;
+  --white: #FFFFFF;
+  --accent-color: #3A6FF8;
+  --dark-text: #9E9E9E;
+  --title-font-size: 32px;
+  --subtitle-font-size: 21px;
+  --main-font-size: 14px;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+input,
+button,
+textarea,
+select {
+  margin: 0;
+  font: inherit;
+}
+
+a {
+  text-decoration: none;
+  user-select: none;
+}
+
+body {
+  background-color: var(--light-gray);
+  color: var(--white);
+  font-weight: 400;
+  font-size: var(--main-font-size);
+  min-height: 100vh;
 }
