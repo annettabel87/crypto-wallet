@@ -13,7 +13,7 @@ export const MetamaskProviders = ({ children }: ChildrenPropsType) => {
       sdkOptions={{
         dappMetadata: {
           name: 'Metamask',
-          url: window?.location.href,
+          url: process.env.APP_URL,
         },
       }}
     >
