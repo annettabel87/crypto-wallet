@@ -18,10 +18,33 @@
   }
 }
 
+@media screen and (max-width: 400px) {
+  .container {
+    flex-direction: column;
+    width: 100%;
+  }
+}
+
 .title {
   font-size: var(--title-font-size);
 }
 
+@media screen and (max-width: 490px) {
+  .title {
+    display: none;
+  }
+}
+
 .error {
   color: red;
+}
+
+.primaryText {
+  color: var(--accent-color);
+}
+
+@media screen and (max-width: 400px) {
+  .primaryText {
+    order: 2;
+  }
 }

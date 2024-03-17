@@ -1,36 +1,28 @@
 'use client';
 import React, { useState } from 'react';
-import { Button, IconButton } from '@mui/material';
-import Menu from '@mui/material/Menu';
-import MenuItem from '@mui/material/MenuItem';
+import { Button, IconButton, Snackbar } from '@mui/material';
 import ContentCopyRoundedIcon from '@mui/icons-material/ContentCopyRounded';
 import s from './Header.module.css';
 
 interface IHeaderProps {
-  account: string;
+  account: string | undefined;
   connecting: boolean;
-  connected: boolean;
   connect: () => Promise<void>;
   disconnect: () => Promise<void>;
   error: string;
 }
 
-const Header = ({
-  account,
-  connect,
-  connecting,
-  disconnect,
-  connected,
-  error,
-}: IHeaderProps) => {
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+const Header = ({ account, connect, connecting, disconnect, error }: IHeaderProps) => {
+  const [isShowSnackbar, setIsShowSnackbar] = useState(false);
 
-  const handleMenuClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleMenuClose = () => {
-    setAnchorEl(null);
+  const copyAddress = () => {
+    if (account) {
+      navigator.clipboard.writeText(account);
+      setIsShowSnackbar(true);
+      setTimeout(() => {
+        setIsShowSnackbar(false);
+      }, 1000);
+    }
   };
 
   return (
@@ -38,50 +30,30 @@ const Header = ({
       <div className={s.container}>
         <div className={s.title}>Testnet</div>
         {error && <p className={s.error}>{error}</p>}
-        {!account && (
-          <Button variant="contained" onClick={connect}>
-            Connect
-          </Button>
-        )}
-        {connecting && (
-          <Button variant="contained" disabled={connecting}>
-            connecting...
-          </Button>
-        )}
-
-        {connected && account && (
-          <div>
-            <Button variant="outlined" onClick={handleMenuClick}>
-              {account.slice(0, 7)}...
-            </Button>
-
-            <Menu
-              anchorEl={anchorEl}
-              open={Boolean(anchorEl)}
-              onClose={handleMenuClose}
-              MenuListProps={{
-                'aria-labelledby': 'basic-button',
-              }}
-              slotProps={{
-                paper: {
-                  style: {
-                    backgroundColor: '#4d5466',
-                    color: '#fff',
-                  },
-                },
-              }}
-            >
-              <MenuItem onClick={() => navigator.clipboard.writeText(account)}>
-                {account}{' '}
-                <IconButton aria-label="copy">
-                  <ContentCopyRoundedIcon sx={{ color: 'white' }} />
-                </IconButton>
-              </MenuItem>
-              <MenuItem onClick={disconnect}>Disconnect</MenuItem>
-            </Menu>
+        {account && (
+          <div className={s.primaryText}>
+            {account.slice(0, 10)}
+            {'... '}
+            <IconButton aria-label="copy" onClick={copyAddress}>
+              <ContentCopyRoundedIcon sx={{ color: '#3A6FF8' }} />
+            </IconButton>
           </div>
         )}
+        {!account ? (
+          <Button variant="contained" onClick={connect} disabled={connecting}>
+            {connecting ? 'connecting...' : 'Connect'}
+          </Button>
+        ) : (
+          <Button variant="outlined" onClick={disconnect}>
+            disconnect
+          </Button>
+        )}
       </div>
+      <Snackbar
+        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+        open={isShowSnackbar}
+        message="Copied"
+      />
     </header>
   );
 };
