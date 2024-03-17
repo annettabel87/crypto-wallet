@@ -27,6 +27,12 @@ export const NETWORKS: NetworksType = {
   },
 };
 
+export const METAMASK_METHODS = {
+  ETH_SEND_TRANSACTION: 'eth_sendTransaction',
+  SWITCH_CHAIN: 'wallet_switchEthereumChain',
+  ETH_GAS_PRICE: 'eth_gasPrice',
+};
+
 interface INetwork {
   chainID: string;
   name: string;

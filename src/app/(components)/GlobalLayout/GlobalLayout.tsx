@@ -3,16 +3,15 @@ import React, { useState } from 'react';
 import Header from '../Header/Header';
 import { useSDK } from '@metamask/sdk-react';
 import { ChildrenPropsType } from '@/app/(providers)/MetaMaskProviders';
+import s from './GlobalLayout.module.css';
 
 const GlobalLayout = ({ children }: ChildrenPropsType) => {
-  const [account, setAccount] = useState<string>('');
   const [error, setError] = useState<string>('');
-  const { sdk, connected, connecting } = useSDK();
+  const { sdk, connecting, account } = useSDK();
 
   const connect = async () => {
     try {
-      const accounts = await sdk?.connect();
-      setAccount(accounts?.[0]);
+      await sdk?.connect();
     } catch (err) {
       setError('failed to connect..');
     }
@@ -22,7 +21,6 @@ const GlobalLayout = ({ children }: ChildrenPropsType) => {
     try {
       if (sdk) {
         sdk.terminate();
-        setAccount('');
       }
     } catch (err) {
       setError('failed to disconnect..');
@@ -30,17 +28,16 @@ const GlobalLayout = ({ children }: ChildrenPropsType) => {
   };
 
   return (
-    <>
+    <div className={s.layout}>
       <Header
         account={account}
         connecting={connecting}
-        connected={connected}
         connect={connect}
         disconnect={disconnect}
         error={error}
       />
-      <main>{children}</main>
-    </>
+      <main className={s.main}>{children}</main>
+    </div>
   );
 };
 
